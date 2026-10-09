@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMIR DAHIT - MEMORIALIZED RECOVERY PANEL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #020202;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            opacity: 0.65;
+        }
+
+        @keyframes borderColors {
+            0%, 100% { border-color: #ff0000; box-shadow: 0 0 25px #ff0000; }
+            25% { border-color: #00ff00; box-shadow: 0 0 25px #00ff00; }
+            50% { border-color: #ffff00; box-shadow: 0 0 25px #ffff00; }
+            75% { border-color: #00ffff; box-shadow: 0 0 25px #00ffff; }
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 20px;
+        }
+
+        .vip-container {
+            width: 100%;
+            background: rgba(6, 6, 6, 0.35); 
+            backdrop-filter: blur(5px); 
+            border: 3px solid #ff0000;
+            animation: borderColors 10s infinite linear;
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* SPECIAL RED SERVICE BOX STYLE */
+        .red-service-container {
+            width: 100%;
+            background: rgba(10, 2, 2, 0.6); 
+            backdrop-filter: blur(5px); 
+            border: 3px solid #ff0000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .header-tag {
+            font-size: 12px;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .red-header-tag {
+            font-size: 13px;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        .brand-logo {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .brand-logo .samir { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+        .brand-logo .dahit { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .brand-logo .docs-yellow { color: #ffff00; text-shadow: 0 0 12px #ffff00; }
+        .brand-logo .service-title { color: #ff2222; text-shadow: 0 0 15px #ff0000; font-weight: 900; }
+
+        /* YELLOW AND BLUE HASHTAG SUBTITLE */
+        .sub-hashtag-tag {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            line-height: 1.4;
+        }
+        .sub-hashtag-tag .yellow-part { color: #ffff00; text-shadow: 0 0 8px #ffff00; }
+        .sub-hashtag-tag .blue-part { color: #0088cc; text-shadow: 0 0 8px #0088cc; }
+
+        .line-divider {
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+            margin: 15px 0;
+        }
+
+        .red-line-divider {
+            border-bottom: 1px dashed rgba(255, 0, 0, 0.5);
+            margin: 15px 0;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #00ff00;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 15, 15, 0.7);
+            border: 1px solid #ff0000;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            box-sizing: border-box;
+            outline: none;
+            font-size: 14px;
+        }
+        .input-group input:focus {
+            border-color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .gen-btn {
+            width: 100%;
+            padding: 14px;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+        .gen-btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        .output-box {
+            margin-top: 20px;
+            background: rgba(5, 5, 5, 0.8);
+            border: 1px solid #ffff00;
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            text-align: left;
+        }
+        .output-title {
+            color: #ffff00;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .appeal-text {
+            background: #000;
+            padding: 15px;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 13px;
+            white-space: pre-wrap;
+            max-height: 260px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            line-height: 1.5;
+        }
+        .copy-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            background: #ffff00;
+            color: #000;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
+        .copy-btn:hover { box-shadow: 0 0 10px #ffff00; }
+
+        /* MULTI-COLOR NUMBERED LIST PANEL */
+        .service-list {
+            text-align: left;
+            padding: 0;
+            margin: 20px 0;
+            list-style: none;
+        }
+        .service-list li {
+            font-size: 11px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 1.2px;
+            line-height: 1.4;
+        }
+        .service-list li .list-num {
+            font-size: 14px;
+            font-weight: 900;
+            margin-right: 8px;
+            width: 20px;
+            display: inline-block;
+        }
+        .service-list li i {
+            margin-right: 12px;
+            font-size: 18px; 
+            width: 22px;
+            text-align: center;
+        }
+
+        /* NEON MULTI-COLOR ASSIGNMENTS WITH GLOW */
+        .color-1 { color: #00ff00; text-shadow: 0 0 10px rgba(0, 255, 0, 0.5); } 
+        .color-1 i, .color-1 .list-num { color: #00ff00; filter: drop-shadow(0 0 8px #00ff00); }
+
+        .color-2a { color: #00ffaa; text-shadow: 0 0 10px rgba(0, 255, 170, 0.5); } 
+        .color-2a i, .color-2a .list-num { color: #00ffaa; filter: drop-shadow(0 0 8px #00ffaa); }
+
+        .color-2 { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); } 
+        .color-2 i, .color-2 .list-num { color: #00ffff; filter: drop-shadow(0 0 8px #00ffff); }
+
+        .color-3 { color: #ffff00; text-shadow: 0 0 10px rgba(255, 255, 0, 0.5); } 
+        .color-3 i, .color-3 .list-num { color: #ffff00; filter: drop-shadow(0 0 8px #ffff00); }
+
+        .color-4 { color: #ff5555; text-shadow: 0 0 10px rgba(255, 85, 85, 0.5); } 
+        .color-4 i, .color-4 .list-num { color: #ff5555; filter: drop-shadow(0 0 8px #ff5555); }
+
+        .color-extra { color: #ff33aa; text-shadow: 0 0 10px rgba(255, 51, 170, 0.5); } 
+        .color-extra i, .color-extra .list-num { color: #ff33aa; filter: drop-shadow(0 0 8px #ff33aa); }
+
+        .color-5 { color: #ff00ff; text-shadow: 0 0 10px rgba(255, 0, 255, 0.5); } 
+        .color-5 i, .color-5 .list-num { color: #ff00ff; filter: drop-shadow(0 0 8px #ff00ff); }
+
+        .color-6 { color: #ffaa00; text-shadow: 0 0 10px rgba(255, 170, 0, 0.5); } 
+        .color-6 i, .color-6 .list-num { color: #ffaa00; filter: drop-shadow(0 0 8px #ffaa00); }
+
+        .color-7 { color: #b57cff; text-shadow: 0 0 10px rgba(181, 124, 255, 0.5); } 
+        .color-7 i, .color-7 .list-num { color: #b57cff; filter: drop-shadow(0 0 8px #b57cff); }
+
+
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .vip-btn {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            padding: 13px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            background: rgba(15, 15, 15, 0.6);
+            box-sizing: border-box;
+        }
+        .vip-btn i { font-size: 20px; margin-right: 15px; width: 25px; text-align: center; }
+
+        .whatsapp-link { border: 1px solid #25d366; color: #25d366; }
+        .whatsapp-link:hover { background: #25d366; color: #fff; box-shadow: 0 0 15px #25d366; }
+        .instagram-link { border: 1px solid #e1306c; color: #e1306c; }
+        .instagram-link:hover { background: #e1306c; color: #fff; box-shadow: 0 0 15px #e1306c; }
+        .telegram-link { border: 1px solid #0088cc; color: #0088cc; }
+        .telegram-link:hover { background: #0088cc; color: #fff; box-shadow: 0 0 15px #0088cc; }
+        .facebook-link { border: 1px solid #1877f2; color: #1877f2; }
+        .facebook-link:hover { background: #1877f2; color: #fff; box-shadow: 0 0 15px #1877f2; }
+
+        .copyright { font-size: 10px; color: #888; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<div class="main-wrapper">
+
+    <div class="vip-container">
+        <div class="header-tag"><i class="fa-solid fa-skull-crossbones"></i> Memorialized Recovery Web</div>
+        <div class="brand-logo">
+            <span class="samir">SAMIR</span> <span class="dahit">DAHIT</span>
+        </div>
+        <div class="sub-hashtag-tag">
+            <span class="yellow-part">#MEMORIALIZE ACCOUNT RECOVERY</span> <span class="blue-part">APPEAL GENERATOR</span>
+        </div>
+        <div class="line-divider"></div>
+
+        <div class="input-group">
+            <label><i class="fa-solid fa-user-check"></i> My Full Account Name</label>
+            <input type="text" id="myAccountName" placeholder="Enter your legal account name...">
+        </div>
+        <div class="input-group">
+            <label><i class="fa-solid fa-envelope"></i> Linked Email Address</label>
+            <input type="text" id="myAccountEmail" placeholder="example@gmail.com...">
+        </div>
+        <div class="input-group">
+            <label><i class="fa-solid fa-calendar-days"></i> Date of Birth (DOB)</label>
+            <input type="text" id="myAccountDOB" placeholder="DD/MM/YYYY">
+        </div>
+        <div class="input-group">
+            <label><i class="fa-solid fa-link"></i> My Profile Link / URL</label>
+            <input type="text" id="myAccountLink" placeholder="https://facebook.com/...">
+        </div>
+
+    <div class="red-service-container">
+        <div class="red-header-tag"><i class="fa-solid fa-shield-halved"></i> Welcome ❤️</div>
+        <div class="brand-logo">
+            <span class="service-title">#SOCIAL MEDIA SERVICE</span>
+        </div>
+        <div class="red-line-divider"></div>
+
+        <ul class="service-list">
+            <li class="color-1"><span class="list-num">1.</span><i class="fa-solid fa-lock-open"></i> facebook account unlock available</li>
+            <li class="color-2a"><span class="list-num">2.</span><i class="fa-solid fa-key"></i> facebook account two factor break available</li>
+            <li class="color-2"><span class="list-num">3.</span><i class="fa-solid fa-user-minus"></i> Facebook suspended account Recovery available</li>
+            <li class="color-3"><span class="list-num">4.</span><i class="fa-solid fa-user-shield"></i> Fake Facebook Account Removed available</li>
+            <li class="color-4"><span class="list-num">5.</span><i class="fa-solid fa-file-invoice"></i> Fb impostor document available</li>
+            <li class="color-5"><span class="list-num">6.</span><i class="fa-solid fa-book-dead"></i> Facebook memorialize report available</li>
+            <li class="color-extra"><span class="list-num">7.</span><i class="fa-solid fa-file-signature"></i> Fb memorialize report document available</li>
+            <li class="color-6"><span class="list-num">8.</span><i class="fa-solid fa-heart-crack"></i> Facebook memorialize account recover available</li>
+            <li class="color-7"><span class="list-num">9.</span><i class="fa-solid fa-square-instagram"></i> Instagram suspended account Recovery available</li>
+            <li class="color-18"><span class="list-num">10.</span><i class="fa-solid fa-lock-open"></i> Tiktok Account Ban Available</li>
+</ul>
+
+        <div class="red-line-divider"></div>
+        <div class="copyright" style="color: #ff5555;"></div>
+    </div>
+
+
+    <div class="vip-container">
+        <div class="header-tag"><i class="fa-solid fa-file-shield">Samir Hub</i></div>
+        <div class="brand-logo">
+            <span class="docs-yellow">#Contact's</span>
+        </div>
+        <div class="line-divider"></div>
+
+        <div class="links-grid">
+            <a href="https://wa.me/@samir.hero16" target="_blank" class="vip-btn whatsapp-link" onclick="playBeep()">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp 
+            </a>
+            <a href="https://www.instagram.com/samir.hero.16" target="_blank" class="vip-btn instagram-link" onclick="playBeep()">
+                <i class="fa-brands fa-instagram"></i> Instagram  
+            </a>
+            <a href="https://t.me/Samir_Eraxx" target="_blank" class="vip-btn telegram-link" onclick="playBeep()">
+                <i class="fa-brands fa-telegram"></i> Telegram  
+            </a>
+            <a href="https://www.facebook.com/thw.samir" target="_blank" class="vip-btn facebook-link" onclick="playBeep()">
+                <i class="fa-brands fa-facebook-f"></i> Facebook 
+            </a>
+        </div>
+
+        <div class="line-divider"></div>
+        <div class="copyright">SECURED CODE BY SAMIR HERO © 2026</div>
+    </div>
+
+</div>
+
+<script>
+    // MATRIX RAIN LOGIC
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const letters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ☠⚡☣★';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(2, 2, 2, 0.06)'; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = fontSize + 'px monospace';
+        for (let i = 0; i < drops.length; i++) {
+            const text = letters[Math.floor(Math.random() * letters.length)];
+            ctx.fillStyle = Math.random() > 0.5 ? '#ff0000' : '#00ff00';
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.98) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(drawMatrix, 30);
+
+    function playBeep() {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(900, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.08);
+    }
+
+    function getRandomElement(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // ORIGINAL MEMORIALIZED ENGINE WITH AUTOMATIC DOB MIXER
+    function generateMemorialAppeal() {
+        playBeep();
+        const name = document.getElementById('myAccountName').value.trim();
+        const email = document.getElementById('myAccountEmail').value.trim();
+        const dob = document.getElementById('myAccountDOB').value.trim();
+        const link = document.getElementById('myAccountLink').value.trim();
+
+        if(!name || !email || !dob || !link) {
+            alert("⚠️ Error: Please fill Name, Email, DOB, and Profile Link first!");
+            return;
+        }
+
+        const greetings = ["Dear Facebook Account Review Team,", "Hello Meta Help Center Operations,", "Respected Facebook Technical Support Team,"];
+        const openings = ["I am writing this official appeal to report a critical error regarding my personal profile which has been mistakenly memorialized.", "My authentic Facebook profile has been locked under a false death report, and I am submitting this request for an urgent audit."];
+        
+        const details = [
+            `\n\n[My Official Profile Credentials]\n- Legal Name: ${name}\n- Associated Email: ${email}\n- Date of Birth: ${dob}\n- Profile Link: ${link}\n\n`,
+            `\n\n[Locked Account Specifications]\n- Account Holder: ${name}\n- Master Email: ${email}\n- Birth Date (DOB): ${dob}\n- Hyperlink Location: ${link}\n\n`
+        ];
+        
+        const bodies = ["I am completely alive and well. A malicious user has abused your memorialization system by submitting counterfeit documents to lock me out.", "This account was locked by mistake based on false information. I am fully active and ready to undergo live verification."];
+        const closings = ["Thank you for your immediate support and quick enforcement of justice.", "Please review my attached files and restore my access as soon as possible. Sincerely."];
+
+        const finalAppeal = getRandomElement(greetings) + "\n\n" + getRandomElement(openings) + getRandomElement(details) + getRandomElement(bodies) + "\n\n" + getRandomElement(closings);
+        document.getElementById('appealResult').innerText = finalAppeal;
+        document.getElementById('outputBox').style.display = "block";
+    }
+
+    function copyAppeal() {
+        playBeep();
+        const text = document.getElementById('appealResult').innerText;
+        navigator.clipboard.writeText(text).then(() => { alert("✅ VIP Memorial Appeal copied!"); });
+    }
+</script>
+</body>
+</html>
